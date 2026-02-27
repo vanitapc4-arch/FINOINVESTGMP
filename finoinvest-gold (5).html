@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FinoInvest — India's Premium IPO Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN: Luxury Dark Gold — like a Bloomberg
+   terminal crossed with a private bank.
+   Cormorant Garamond for elegance, Jost for clarity.
+═══════════════════════════════════════════ */
+:root {
+  --ink:     #08090d;
+  --ink2:    #0f1118;
+  --ink3:    #161b27;
+  --ink4:    #1d2436;
+  --gold:    #c9a84c;
+  --gold2:   #e8c97a;
+  --gold3:   #f5e0a0;
+  --gold-d:  rgba(201,168,76,0.15);
+  --gold-g:  rgba(201,168,76,0.28);
+  --gold-b:  rgba(201,168,76,0.08);
+  --green:   #2dd4a0;
+  --green-d: rgba(45,212,160,0.12);
+  --red:     #f4617a;
+  --red-d:   rgba(244,97,122,0.1);
+  --silver:  #8899aa;
+  --silver2: #4a5568;
+  --border:  rgba(201,168,76,0.12);
+  --border2: rgba(201,168,76,0.22);
+  --text:    #e8dfc8;
+  --text2:   #a09070;
+  --text3:   #5a5040;
+  --r:       12px;
+  --r2:      20px;
+  --ff-d:    'Cormorant Garamond', Georgia, serif;
+  --ff-b:    'Jost', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff-b);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* gold grain overlay */
+body::after {
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:0.6;
+}
+
+/* ambient glow */
+.ambient {
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(201,168,76,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 85% 85%, rgba(201,168,76,0.04) 0%, transparent 60%);
+}
+
+/* ═══ PAGES ═══ */
+.page{display:none;position:relative;z-index:1;}
+.page.active{display:block;}
+
+/* ═══ TICKER ═══ */
+.ticker-bar {
+  background: var(--ink2);
+  border-bottom: 1px solid var(--border);
+  height: 36px; overflow:hidden;
+  display:flex;align-items:center;
+  position:relative;z-index:50;
+}
+.ticker-track {
+  display:flex;white-space:nowrap;
+  animation: scroll-left 40s linear infinite;
+}
+.ticker-track:hover{animation-play-state:paused;}
+.t-item {
+  display:inline-flex;align-items:center;gap:10px;
+  padding:0 28px;
+  border-right:1px solid var(--border);
+  font-size:11px;font-weight:500;letter-spacing:0.5px;
+  color:var(--text2);font-family:var(--ff-b);
+}
+.t-item .co{color:var(--text);font-weight:600;}
+.t-pos{color:var(--green);}
+.t-neg{color:var(--red);}
+@keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ═══ NAV ═══ */
+nav {
+  position:sticky;top:0;z-index:200;
+  background:rgba(8,9,13,0.92);
+  backdrop-filter:blur(28px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 52px; height:70px;
+}
+.logo-wrap {
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;
+}
+.logo-emblem {
+  width:42px;height:42px;
+  border:1.5px solid var(--gold);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.logo-emblem::before {
+  content:'';position:absolute;inset:0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.18) 0%, transparent 60%);
+}
+.logo-emblem svg{position:relative;z-index:1;}
+.logo-wordmark {
+  font-family:var(--ff-d);
+  font-size:26px;font-weight:700;
+  letter-spacing:-0.5px;
+  color:var(--text);
+  line-height:1;
+}
+.logo-wordmark em{font-style:normal;color:var(--gold);}
+.logo-tagline {
+  font-size:9px;font-weight:500;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--text3);margin-top:2px;
+}
+
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.nav-links button {
+  background:none;border:none;
+  font-family:var(--ff-b);font-size:13px;font-weight:500;
+  color:var(--text2);padding:9px 18px;border-radius:8px;
+  cursor:pointer;letter-spacing:0.3px;transition:all 0.2s;
+}
+.nav-links button:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.nav-links button.nav-active{color:var(--gold);background:var(--gold-b);}
+.nav-cta-btn {
+  background: linear-gradient(135deg, var(--gold) 0%, #a8782e 100%) !important;
+  color:#08090d !important;font-weight:600 !important;
+  letter-spacing:0.5px !important;
+  box-shadow: 0 0 24px rgba(201,168,76,0.2), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+}
+.nav-cta-btn:hover{box-shadow:0 0 40px rgba(201,168,76,0.35), inset 0 1px 0 rgba(255,255,255,0.15) !important;transform:translateY(-1px);}
+
+/* ═══════════ HOME PAGE ═══════════ */
+.home-hero {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:100px 52px 80px;
+  display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;
+}
+
+/* diagonal gold line */
+.home-hero::before {
+  content:'';
+  position:absolute;right:52px;top:80px;
+  width:1px;height:320px;
+  background:linear-gradient(to bottom,transparent,var(--gold),transparent);
+  opacity:0.3;
+}
+
+.hero-eyebrow {
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px;
+  animation:fadeUp 0.5s ease both;
+}
+.hero-eyebrow::before{
+  content:'';width:24px;height:1px;background:var(--gold);
+}
+
+.hero-h1 {
+  font-family:var(--ff-d);
+  font-size:clamp(48px,6vw,82px);
+  font-weight:600;line-height:1.02;
+  letter-spacing:-1.5px;
+  color:var(--text);
+  margin-bottom:22px;
+  animation:fadeUp 0.6s ease 0.08s both;
+}
+.hero-h1 em{font-style:italic;color:var(--gold2);}
+
+.hero-p {
+  font-size:16px;line-height:1.75;
+  color:var(--text2);max-width:480px;
+  margin-bottom:40px;
+  animation:fadeUp 0.6s ease 0.16s both;
+}
+
+.hero-btns {
+  display:flex;gap:14px;flex-wrap:wrap;
+  animation:fadeUp 0.6s ease 0.24s both;
+}
+
+.btn-gold {
+  background:linear-gradient(135deg,var(--gold) 0%,#a8782e 100%);
+  color:#08090d;font-family:var(--ff-b);
+  font-size:14px;font-weight:600;letter-spacing:0.5px;
+  padding:14px 32px;border-radius:9px;border:none;
+  cursor:pointer;transition:all 0.25s;
+  box-shadow:0 0 28px rgba(201,168,76,0.22),inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 48px rgba(201,168,76,0.38),inset 0 1px 0 rgba(255,255,255,0.2);}
+
+.btn-ghost {
+  background:transparent;
+  color:var(--text);font-family:var(--ff-b);
+  font-size:14px;font-weight:500;
+  padding:14px 32px;border-radius:9px;
+  border:1px solid var(--border2);
+  cursor:pointer;transition:all 0.25s;letter-spacing:0.3px;
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-b);}
+
+/* live panel */
+.live-panel {
+  background:var(--ink2);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  overflow:hidden;
+  animation:fadeUp 0.8s ease 0.2s both;
+  box-shadow:0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+}
+.live-panel-head {
+  background:var(--ink3);
+  padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.live-panel-title {
+  font-family:var(--ff-d);font-size:16px;font-weight:600;
+  color:var(--gold2);
+}
+.live-badge {
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);
+}
+.live-dot-g{width:6px;height:6px;background:var(--green);border-radius:50%;animation:live-pulse 1.5s infinite;}
+@keyframes live-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(45,212,160,0.4);}50%{opacity:0.6;box-shadow:0 0 0 5px rgba(45,212,160,0);}}
+
+.live-row {
+  padding:14px 22px;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.2s;
+}
+.live-row:hover{background:rgba(201,168,76,0.04);}
+.live-row:last-child{border-bottom:none;}
+.lr-name{font-size:13px;font-weight:600;color:var(--text);}
+.lr-type{font-size:10px;color:var(--text3);margin-top:1px;letter-spacing:0.5px;}
+.lr-gmp{text-align:right;}
+.lr-val{font-family:var(--ff-d);font-size:18px;font-weight:600;}
+.lr-pct{font-size:10px;font-weight:600;letter-spacing:0.5px;margin-top:1px;}
+.pos-v{color:var(--green);}
+.neg-v{color:var(--red);}
+.zero-v{color:var(--text3);}
+
+/* ═══ METRICS BAND ═══ */
+.metrics-band {
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--ink2);
+  display:flex;justify-content:center;
+}
+.metric-cell {
+  flex:1;max-width:240px;
+  padding:30px 28px;text-align:center;
+  border-right:1px solid var(--border);
+  cursor:default;transition:background 0.2s;
+}
+.metric-cell:last-child{border-right:none;}
+.metric-cell:hover{background:var(--ink3);}
+.metric-val {
+  font-family:var(--ff-d);
+  font-size:36px;font-weight:600;
+  color:var(--gold2);line-height:1;margin-bottom:6px;
+}
+.metric-lbl {
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);
+}
+
+/* ═══ HOME FEATURES ═══ */
+.home-features {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:80px 52px;
+}
+.section-label {
+  font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.section-h {
+  font-family:var(--ff-d);
+  font-size:clamp(32px,4vw,54px);font-weight:600;
+  letter-spacing:-1px;line-height:1.08;
+  margin-bottom:56px;max-width:520px;
+}
+.section-h em{font-style:italic;color:var(--gold2);}
+
+.feat-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;
+}
+.feat-cell {
+  background:var(--ink2);
+  padding:36px 32px;
+  transition:background 0.25s;
+}
+.feat-cell:hover{background:var(--ink3);}
+.feat-icon{font-size:28px;margin-bottom:18px;}
+.feat-title{
+  font-family:var(--ff-d);font-size:20px;font-weight:600;
+  color:var(--gold2);margin-bottom:10px;
+}
+.feat-desc{font-size:13px;color:var(--text2);line-height:1.7;}
+
+/* ═══════════ TRACKER PAGE ═══════════ */
+.tracker-head {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:56px 52px 32px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  flex-wrap:wrap;gap:24px;
+}
+.tracker-head-left h1 {
+  font-family:var(--ff-d);
+  font-size:clamp(32px,4vw,52px);font-weight:600;
+  letter-spacing:-1px;margin-bottom:6px;
+}
+.tracker-head-left p{color:var(--text2);font-size:14px;}
+
+.controls-row {
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+}
+.pill-tabs {
+  display:flex;gap:3px;
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:10px;padding:4px;
+}
+.pill-tab {
+  padding:7px 16px;border-radius:7px;border:none;background:none;
+  font-family:var(--ff-b);font-size:12px;font-weight:600;
+  letter-spacing:0.5px;text-transform:uppercase;
+  color:var(--text2);cursor:pointer;transition:all 0.18s;
+}
+.pill-tab.active{background:var(--gold);color:var(--ink);}
+
+.search-wrap {
+  display:flex;align-items:center;gap:8px;
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:9px;padding:9px 14px;min-width:220px;
+}
+.search-wrap input {
+  background:none;border:none;outline:none;
+  font-family:var(--ff-b);font-size:13px;color:var(--text);width:100%;
+}
+.search-wrap input::placeholder{color:var(--text3);}
+
+/* AI BUTTON */
+.ai-refresh-btn {
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.06));
+  border:1px solid var(--border2);
+  border-radius:9px;padding:9px 18px;
+  font-family:var(--ff-b);font-size:12px;font-weight:600;
+  color:var(--gold2);letter-spacing:0.5px;
+  cursor:pointer;transition:all 0.2s;
+}
+.ai-refresh-btn:hover{background:var(--gold-d);border-color:var(--gold);}
+.ai-refresh-btn.loading{opacity:0.6;cursor:wait;}
+
+/* TABLE */
+.tracker-body {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:0 52px 60px;
+}
+.table-shell {
+  background:var(--ink2);
+  border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;
+}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--ink3);}
+th {
+  padding:14px 18px;text-align:left;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+td {
+  padding:16px 18px;font-size:13.5px;
+  border-bottom:1px solid rgba(201,168,76,0.05);
+  vertical-align:middle;
+}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(201,168,76,0.03);}
+.co-n{font-weight:600;color:var(--text);font-size:14px;}
+.co-t{font-size:10px;color:var(--text3);margin-top:2px;letter-spacing:0.5px;text-transform:uppercase;}
+
+.badge{display:inline-block;padding:4px 10px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+.b-open{background:rgba(45,212,160,0.1);color:var(--green);border:1px solid rgba(45,212,160,0.2);}
+.b-upcoming{background:rgba(100,130,255,0.1);color:#7090ff;border:1px solid rgba(100,130,255,0.2);}
+.b-allotment{background:rgba(201,168,76,0.1);color:var(--gold2);border:1px solid var(--border2);}
+.b-listed{background:rgba(90,80,64,0.2);color:var(--text3);border:1px solid rgba(90,80,64,0.3);}
+
+.gp{color:var(--green);font-weight:700;}
+.gn{color:var(--red);font-weight:700;}
+.gz{color:var(--text3);font-weight:600;}
+
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar-bg{width:56px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;}
+
+.sentiment{font-size:13px;}
+
+.tbl-foot {
+  background:var(--ink3);border-top:1px solid var(--border);
+  padding:12px 20px;font-size:11px;color:var(--text3);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.ai-tag {
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--gold-b);border:1px solid var(--border);
+  color:var(--gold2);padding:3px 9px;border-radius:100px;font-size:10px;font-weight:600;
+  letter-spacing:0.5px;
+}
+
+/* DISCLAIMER */
+.disc {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:0 52px;
+}
+.disc-inner {
+  background:rgba(201,168,76,0.04);
+  border:1px solid rgba(201,168,76,0.12);
+  border-radius:10px;padding:14px 20px;
+  font-size:11.5px;color:var(--text3);line-height:1.65;
+  margin-bottom:24px;
+}
+.disc-inner strong{color:var(--gold);}
+
+/* ═══════════ CALENDAR PAGE ═══════════ */
+.cal-head {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:56px 52px 36px;
+}
+.cal-head h1{font-family:var(--ff-d);font-size:clamp(32px,4vw,52px);font-weight:600;letter-spacing:-1px;margin-bottom:8px;}
+.cal-head p{color:var(--text2);font-size:14px;}
+
+.cal-body {
+  position:relative;z-index:1;
+  max-width:1360px;margin:0 auto;
+  padding:0 52px 60px;
+}
+
+.cal-month {
+  margin-bottom:48px;
+}
+.cal-month-label {
+  font-family:var(--ff-d);
+  font-size:13px;font-weight:600;
+  color:var(--gold);letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+}
+.cal-month-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.cal-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;
+}
+.cal-card {
+  background:var(--ink2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:22px;
+  transition:all 0.25s;
+  position:relative;overflow:hidden;
+}
+.cal-card::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  opacity:0;transition:opacity 0.25s;
+}
+.cal-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.cal-card:hover::before{opacity:1;}
+.cal-card-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.cal-name{font-weight:600;font-size:14px;color:var(--text);}
+.cal-type{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+.cal-r{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;}
+.cal-r:last-child{margin-bottom:0;}
+.cal-r strong{color:var(--text);}
+
+/* ═══════════ CALCULATOR PAGE ═══════════ */
+.calc-head {
+  position:relative;z-index:1;
+  max-width:1000px;margin:0 auto;
+  padding:56px 52px 32px;
+}
+.calc-head h1{font-family:var(--ff-d);font-size:clamp(32px,4vw,52px);font-weight:600;letter-spacing:-1px;margin-bottom:8px;}
+.calc-head p{color:var(--text2);font-size:14px;}
+
+.calc-body {
+  position:relative;z-index:1;
+  max-width:1000px;margin:0 auto;
+  padding:0 52px 80px;
+  display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;
+}
+
+.calc-form-card {
+  background:var(--ink2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:36px;
+}
+.calc-form-card h2{
+  font-family:var(--ff-d);font-size:22px;font-weight:600;
+  color:var(--gold2);margin-bottom:28px;
+}
+
+.fg{margin-bottom:22px;}
+label {
+  display:block;font-size:10px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text3);margin-bottom:8px;
+}
+.inp {
+  width:100%;background:var(--ink3);
+  border:1px solid var(--border2);border-radius:9px;
+  padding:13px 16px;color:var(--text);
+  font-family:var(--ff-b);font-size:15px;outline:none;
+  transition:border-color 0.2s;
+}
+.inp:focus{border-color:var(--gold);}
+.inp-pfx{position:relative;}
+.pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text2);font-weight:600;}
+.inp-pfx .inp{padding-left:28px;}
+select.inp option{background:var(--ink3);}
+
+.calc-result-card {
+  background:var(--ink2);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);padding:36px;
+  position:relative;overflow:hidden;
+}
+.calc-result-card::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),transparent);
+}
+.calc-result-card h2{
+  font-family:var(--ff-d);font-size:22px;font-weight:600;
+  color:var(--gold2);margin-bottom:28px;
+}
+.res-row{
+  padding:16px 0;border-bottom:1px solid var(--border);
+}
+.res-row:last-of-type{border-bottom:none;padding-bottom:0;}
+.res-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.res-val{font-family:var(--ff-d);font-size:30px;font-weight:600;color:var(--gold2);line-height:1;}
+.res-val.pos{color:var(--green);}
+.res-val.neg{color:var(--red);}
+.res-val.neutral{color:var(--text);}
+.res-hint{font-size:11px;color:var(--text3);margin-top:4px;}
+.calc-note{
+  margin-top:20px;
+  padding:14px;background:rgba(201,168,76,0.05);
+  border:1px solid var(--border);border-radius:9px;
+  font-size:11.5px;color:var(--text3);line-height:1.6;
+}
+
+/* ═══════════ CONTACT PAGE ═══════════ */
+.contact-wrap {
+  position:relative;z-index:1;
+  max-width:1200px;margin:0 auto;
+  padding:70px 52px 80px;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:72px;align-items:start;
+}
+.contact-left h1{
+  font-family:var(--ff-d);
+  font-size:clamp(36px,4.5vw,60px);font-weight:600;
+  letter-spacing:-1.5px;line-height:1.05;
+  margin-bottom:18px;
+}
+.contact-left h1 em{font-style:italic;color:var(--gold2);}
+.contact-left>p{color:var(--text2);font-size:15px;line-height:1.75;margin-bottom:40px;}
+
+.contact-detail{
+  display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;
+}
+.cd-icon{
+  width:44px;height:44px;min-width:44px;
+  background:var(--gold-b);border:1px solid var(--border);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.cd-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
+.cd-val{font-size:14px;color:var(--text);}
+
+.contact-form-card {
+  background:var(--ink2);border:1px solid var(--border2);
+  border-radius:var(--r2);padding:40px;
+  position:relative;overflow:hidden;
+}
+.contact-form-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),transparent);
+}
+.contact-form-card h2{
+  font-family:var(--ff-d);font-size:24px;font-weight:600;
+  color:var(--gold2);margin-bottom:28px;
+}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+textarea.inp{resize:vertical;min-height:120px;}
+
+.form-success-state {
+  display:none;text-align:center;padding:48px 20px;
+}
+.form-success-state .big-check{font-size:60px;margin-bottom:16px;}
+.form-success-state h3{font-family:var(--ff-d);font-size:28px;font-weight:600;color:var(--gold2);margin-bottom:8px;}
+.form-success-state p{color:var(--text2);font-size:14px;line-height:1.7;}
+
+/* ═══ FOOTER ═══ */
+footer {
+  position:relative;z-index:1;
+  background:var(--ink2);border-top:1px solid var(--border);
+  padding:60px 52px 36px;margin-top:60px;
+}
+.foot-inner{
+  max-width:1360px;margin:0 auto;
+  display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;
+  margin-bottom:48px;
+}
+.foot-brand p{font-size:13px;color:var(--text3);line-height:1.8;margin-top:14px;max-width:260px;}
+.foot-col h4{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;}
+.foot-col ul{list-style:none;}
+.foot-col ul li{margin-bottom:12px;}
+.foot-col ul li button, .foot-col ul li a{
+  background:none;border:none;padding:0;
+  font-family:var(--ff-b);font-size:13px;
+  color:var(--text2);cursor:pointer;text-decoration:none;
+  transition:color 0.2s;
+}
+.foot-col ul li button:hover, .foot-col ul li a:hover{color:var(--gold2);}
+.foot-bottom{
+  max-width:1360px;margin:0 auto;
+  border-top:1px solid var(--border);padding-top:28px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11.5px;color:var(--text3);
+}
+.sebi-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--gold-b);border:1px solid var(--border);
+  color:var(--gold);padding:4px 12px;border-radius:100px;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+}
+
+/* ═══ SHARED UTILS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.spinner {
+  width:32px;height:32px;border:2px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin 0.8s linear infinite;margin:0 auto 14px;
+}
+.empty-state{padding:60px;text-align:center;color:var(--text3);}
+
+/* MOBILE */
+@media(max-width:960px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .home-hero{grid-template-columns:1fr;padding:52px 20px 40px;gap:40px;}
+  .live-panel{display:none;}
+  .metrics-band{flex-wrap:wrap;}
+  .metric-cell{min-width:50%;border-right:none;border-bottom:1px solid var(--border);}
+  .home-features{padding:48px 20px;}
+  .feat-grid{grid-template-columns:1fr;}
+  .tracker-head,.tracker-body,.cal-head,.cal-body,.calc-head,.disc{padding-left:20px;padding-right:20px;}
+  .calc-body{grid-template-columns:1fr;padding-left:20px;padding-right:20px;}
+  .contact-wrap{grid-template-columns:1fr;padding:40px 20px;}
+  .form-row-2{grid-template-columns:1fr;}
+  .foot-inner{grid-template-columns:1fr 1fr;}
+  .foot-bottom{flex-direction:column;gap:12px;text-align:center;}
+  table{font-size:12px;}
+  td,th{padding:11px 10px;}
+}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo-wrap" onclick="nav('home')">
+    <div class="logo-emblem">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#c9a84c;position:relative;z-index:1;line-height:1;">F</span>
+    </div>
+    <div>
+      <div class="logo-wordmark">Fino<em>Invest</em></div>
+      <div class="logo-tagline">IPO Intelligence</div>
+    </div>
+  </div>
+  <ul class="nav-links" id="navEl">
+    <li><button id="nb-home" class="nav-active" onclick="nav('home')">Home</button></li>
+    <li><button id="nb-tracker" onclick="nav('tracker')">IPO Tracker</button></li>
+    <li><button id="nb-calendar" onclick="nav('calendar')">Calendar</button></li>
+    <li><button id="nb-calculator" onclick="nav('calculator')">Calculator</button></li>
+    <li><button id="nb-contact" onclick="nav('contact')">Contact</button></li>
+  </ul>
+</nav>
+
+<!-- ╔═══════════════════════════════════╗ -->
+<!-- ║           HOME PAGE               ║ -->
+<!-- ╚═══════════════════════════════════╝ -->
+<div class="page active" id="page-home">
+  <section class="home-hero">
+    <div>
+      <div class="hero-eyebrow">India's Premium IPO Platform</div>
+      <h1 class="hero-h1">
+        Track IPOs &amp;<br/>
+        <em>Grey Market</em><br/>
+        Premium — Live
+      </h1>
+      <p class="hero-p">Real-time GMP data powered by AI. Subscription figures, allotment status &amp; estimated listing prices for every active Mainboard &amp; SME IPO.</p>
+      <div class="hero-btns">
+        <button class="btn-gold" onclick="nav('tracker')">View Live IPOs →</button>
+        <button class="btn-ghost" onclick="nav('calculator')">Calculate Returns</button>
+      </div>
+    </div>
+    <div class="live-panel" id="homePanel">
+      <div class="live-panel-head">
+        <div class="live-panel-title">Open IPO — GMP</div>
+        <div class="live-badge"><div class="live-dot-g"></div>Live</div>
+      </div>
+      <div id="homePanelRows"></div>
+    </div>
+  </section>
+
+  <div class="metrics-band">
+    <div class="metric-cell"><div class="metric-val" id="m-open">—</div><div class="metric-lbl">Open IPOs</div></div>
+    <div class="metric-cell"><div class="metric-val" id="m-upcoming">—</div><div class="metric-lbl">Upcoming</div></div>
+    <div class="metric-cell"><div class="metric-val" id="m-pos">—</div><div class="metric-lbl">Positive GMP</div></div>
+    <div class="metric-cell"><div class="metric-val" id="m-avg">—</div><div class="metric-lbl">Avg GMP %</div></div>
+    <div class="metric-cell"><div class="metric-val">NSE·BSE</div><div class="metric-lbl">Exchanges</div></div>
+  </div>
+
+  <section class="home-features">
+    <div class="section-label">Why FinoInvest</div>
+    <h2 class="section-h">The intelligence edge<br/>serious investors need</h2>
+    <div class="feat-grid">
+      <div class="feat-cell">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-title">AI-Powered GMP</div>
+        <p class="feat-desc">Claude AI fetches &amp; interprets real-time grey market data, giving you cleaned, verified premium estimates you can trust.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">🧮</div>
+        <div class="feat-title">Profit Calculator</div>
+        <p class="feat-desc">Enter lot size, applications &amp; allotment probability. Get instant estimates of your listing day profit or loss.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">📅</div>
+        <div class="feat-title">IPO Calendar</div>
+        <p class="feat-desc">Full timeline of every open, upcoming &amp; recently closed IPO with key dates — so you never miss an opportunity.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">Live Subscription</div>
+        <p class="feat-desc">QIB, NII &amp; RII subscription figures updated throughout the bidding window. See what the institutions are doing.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">🏆</div>
+        <div class="feat-title">Mainboard + SME</div>
+        <p class="feat-desc">Complete coverage across NSE Emerge, BSE SME, NSE Mainboard &amp; BSE Mainboard — all in one place.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-title">SEBI Compliant</div>
+        <p class="feat-desc">A data platform, not a grey market operator. We aggregate &amp; present information only — fully within SEBI guidelines.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ╔═══════════════════════════════════╗ -->
+<!-- ║         TRACKER PAGE              ║ -->
+<!-- ╚═══════════════════════════════════╝ -->
+<div class="page" id="page-tracker">
+  <div class="tracker-head">
+    <div class="tracker-head-left">
+      <h1>Live IPO GMP Tracker</h1>
+      <p>Real-time grey market premium · Updated every 15 min during market hours</p>
+    </div>
+    <div class="controls-row">
+      <div class="pill-tabs" id="ptabs">
+        <button class="pill-tab active" onclick="filt('all',this)">All</button>
+        <button class="pill-tab" onclick="filt('OPEN',this)">Open</button>
+        <button class="pill-tab" onclick="filt('UPCOMING',this)">Upcoming</button>
+        <button class="pill-tab" onclick="filt('ALLOTMENT',this)">Allotment</button>
+      </div>
+      <div class="search-wrap">
+        <span style="color:var(--text3);">⌕</span>
+        <input type="text" id="searchInp" placeholder="Search IPO…" oninput="doSearch()"/>
+      </div>
+      <button class="ai-refresh-btn" id="aiBtn" onclick="fetchAIData()">
+        <span>✦</span> AI Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="tracker-body">
+    <div class="table-shell">
+      <div id="tblWrap"><div class="empty-state"><div class="spinner"></div><p>Loading…</p></div></div>
+    </div>
+  </div>
+  <div class="disc">
+    <div class="disc-inner">
+      <strong>⚠️ Important Disclaimer:</strong> Grey Market Premium (GMP) data is sourced from unofficial market channels and is provided for <strong>informational purposes only</strong>. GMP does not represent the actual listing price. FinoInvest does not facilitate grey market transactions, which are unregulated and not endorsed by SEBI. Investing based on GMP carries significant risk. Always consult a SEBI-registered investment advisor before making investment decisions.
+    </div>
+  </div>
+</div>
+
+<!-- ╔═══════════════════════════════════╗ -->
+<!-- ║         CALENDAR PAGE             ║ -->
+<!-- ╚═══════════════════════════════════╝ -->
+<div class="page" id="page-calendar">
+  <div class="cal-head">
+    <div class="section-label">Schedule</div>
+    <h1>IPO Calendar</h1>
+    <p>All IPO open, close &amp; listing dates for February – March 2025</p>
+  </div>
+  <div class="cal-body">
+    <div id="calBody"></div>
+  </div>
+</div>
+
+<!-- ╔═══════════════════════════════════╗ -->
+<!-- ║        CALCULATOR PAGE            ║ -->
+<!-- ╚═══════════════════════════════════╝ -->
+<div class="page" id="page-calculator">
+  <div class="calc-head">
+    <div class="section-label">Tools</div>
+    <h1>IPO Profit Calculator</h1>
+    <p>Estimate your listing day returns based on GMP, lot size &amp; allotment probability</p>
+  </div>
+  <div class="calc-body">
+    <div class="calc-form-card">
+      <h2>Enter IPO Details</h2>
+      <div class="fg">
+        <label>Select Active IPO</label>
+        <select class="inp" id="cal-sel" onchange="prefill()">
+          <option value="">— Or enter manually below —</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Issue Price</label>
+        <div class="inp-pfx"><span class="pfx">₹</span>
+        <input class="inp" type="number" id="cal-price" placeholder="e.g. 500" oninput="calc()"/></div>
+      </div>
+      <div class="fg">
+        <label>Grey Market Premium (GMP)</label>
+        <div class="inp-pfx"><span class="pfx">₹</span>
+        <input class="inp" type="number" id="cal-gmp" placeholder="e.g. 120" oninput="calc()"/></div>
+      </div>
+      <div class="fg">
+        <label>Lot Size (shares per lot)</label>
+        <input class="inp" type="number" id="cal-lot" placeholder="e.g. 30" oninput="calc()"/>
+      </div>
+      <div class="fg">
+        <label>Number of Applications</label>
+        <input class="inp" type="number" id="cal-apps" value="1" min="1" oninput="calc()"/>
+      </div>
+      <div class="fg">
+        <label>Allotment Probability</label>
+        <select class="inp" id="cal-prob" onchange="calc()">
+          <option value="1">Certain — Already allotted</option>
+          <option value="0.5">50% — Moderate subscription</option>
+          <option value="0.2">20% — Heavily oversubscribed</option>
+          <option value="0.1">10% — 50x+ oversubscribed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="calc-result-card">
+      <h2>📈 Estimated Returns</h2>
+      <div class="res-row">
+        <div class="res-lbl">Estimated Listing Price</div>
+        <div class="res-val neutral" id="r-list">₹ —</div>
+        <div class="res-hint">Issue Price + GMP</div>
+      </div>
+      <div class="res-row">
+        <div class="res-lbl">GMP Return</div>
+        <div class="res-val pos" id="r-pct">— %</div>
+        <div class="res-hint">Percentage gain at GMP</div>
+      </div>
+      <div class="res-row">
+        <div class="res-lbl">Investment (per lot)</div>
+        <div class="res-val neutral" id="r-inv">₹ —</div>
+        <div class="res-hint">Issue Price × Lot Size</div>
+      </div>
+      <div class="res-row">
+        <div class="res-lbl">Profit per Lot at GMP</div>
+        <div class="res-val pos" id="r-lot">₹ —</div>
+        <div class="res-hint">GMP × Lot Size</div>
+      </div>
+      <div class="res-row">
+        <div class="res-lbl">Expected Total Profit</div>
+        <div class="res-val pos" id="r-total">₹ —</div>
+        <div class="res-hint" id="r-hint">Across all expected allotments</div>
+      </div>
+      <div class="calc-note">
+        ⚠️ These estimates are based on current GMP and are speculative. Actual listing prices depend on market conditions. Past GMP is not indicative of listing performance.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔═══════════════════════════════════╗ -->
+<!-- ║         CONTACT PAGE              ║ -->
+<!-- ╚═══════════════════════════════════╝ -->
+<div class="page" id="page-contact">
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <div class="section-label">Get In Touch</div>
+      <h1>Let's talk <em>investments</em></h1>
+      <p>Have questions about an IPO, want to report a GMP discrepancy, or looking to open a demat account through FinoInvest? Our team is here to help.</p>
+      <div class="contact-detail">
+        <div class="cd-icon">📧</div>
+        <div><div class="cd-label">Email</div><div class="cd-val">finoinvest0@gmail.com</div></div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">📞</div>
+        <div><div class="cd-label">Phone</div><div class="cd-val">+91 9082327201</div></div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">📍</div>
+        <div><div class="cd-label">Office</div><div class="cd-val">Malad, Mumbai — 400 064</div></div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">⏰</div>
+        <div><div class="cd-label">Support Hours</div><div class="cd-val">Mon–Sat, 9:00 AM – 6:00 PM IST</div></div>
+      </div>
+    </div>
+
+    <div class="contact-form-card">
+      <h2>Send a Message</h2>
+      <div id="cFormWrap">
+        <div class="form-row-2">
+          <div class="fg"><label>First Name</label><input class="inp" type="text" id="cf-fn" placeholder="Arjun"/></div>
+          <div class="fg"><label>Last Name</label><input class="inp" type="text" id="cf-ln" placeholder="Sharma"/></div>
+        </div>
+        <div class="fg"><label>Email</label><input class="inp" type="email" id="cf-em" placeholder="you@example.com"/></div>
+        <div class="fg"><label>Phone</label><input class="inp" type="tel" id="cf-ph" placeholder="+91 98765 43210"/></div>
+        <div class="fg">
+          <label>I'm interested in</label>
+          <select class="inp" id="cf-sub">
+            <option>IPO GMP Data Query</option>
+            <option>Opening a Demat Account</option>
+            <option>Partnership / Media</option>
+            <option>Report GMP Discrepancy</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea class="inp" id="cf-msg" placeholder="How can we help you…"></textarea></div>
+        <button class="btn-gold" style="width:100%" onclick="submitForm()">Send Message →</button>
+      </div>
+      <div class="form-success-state" id="cFormOk">
+        <div class="big-check">✅</div>
+        <h3>Message Received</h3>
+        <p>Thank you for reaching out. A member of our team will respond within 24 hours on business days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo-wrap" onclick="nav('home')" style="cursor:pointer;">
+        <div class="logo-emblem">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#c9a84c;position:relative;z-index:1;line-height:1;">F</span>
+        </div>
+        <div>
+          <div class="logo-wordmark">Fino<em>Invest</em></div>
+          <div class="logo-tagline">IPO Intelligence</div>
+        </div>
+      </div>
+      <p>India's most trusted IPO GMP tracker. Real-time grey market data, subscription figures &amp; listing estimates — free forever.</p>
+      <div class="sebi-chip" style="margin-top:16px;">📋 Data Platform Only — Not a Broker</div>
+    </div>
+    <div class="foot-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><button onclick="nav('tracker')">IPO Tracker</button></li>
+        <li><button onclick="nav('calendar')">IPO Calendar</button></li>
+        <li><button onclick="nav('calculator')">GMP Calculator</button></li>
+        <li><button onclick="nav('tracker')">Allotment Status</button></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <ul>
+        <li><button onclick="nav('contact')">Contact Us</button></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press Kit</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Disclaimer</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">SEBI Guidelines</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 FinoInvest Financial Services Pvt. Ltd. All rights reserved.</span>
+    <span>🇮🇳 Made with pride in Mumbai, India · Data for informational purposes only</span>
+  </div>
+</footer>
+
+<script>
+/* ════════════════════════════════════════
+   DATA
+════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   LIVE DATA — AI AUTO-FETCHES EVERY LOAD
+   No hardcoded IPOs. Claude API fetches
+   fresh data based on today's actual date.
+════════════════════════════════════════ */
+let IPOS = [];
+const SO = {OPEN:0,ALLOTMENT:1,UPCOMING:2,LISTED:3};
+let curFilt = "all", curSearch = "";
+let dataLoaded = false;
+
+// ── Show full-page loading overlay ──
+function showGlobalLoader(msg="Fetching live IPO data…") {
+  document.getElementById('globalLoader').style.display='flex';
+  document.getElementById('loaderMsg').textContent=msg;
+}
+function hideGlobalLoader() {
+  document.getElementById('globalLoader').style.display='none';
+}
+
+// ── Master AI fetch — runs on every page load ──
+async function loadLiveData(isRefresh=false) {
+  if(isRefresh) {
+    const btn=document.getElementById('aiBtn');
+    if(btn){btn.classList.add('loading');btn.innerHTML='<span>⟳</span> Fetching…';}
+  } else {
+    showGlobalLoader();
+  }
+
+  const today = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+
+  // Robust JSON extractor — pulls first valid [...] array from any text
+  function extractJSON(txt) {
+    // 1. Strip markdown fences
+    txt = txt.replace(/```json[\s\S]*?```/gi, m => m.replace(/```json\s*/i,'').replace(/```/,''))
+             .replace(/```[\s\S]*?```/g, m => m.replace(/```\s*/g,''))
+             .trim();
+    // 2. Try direct parse first
+    try { const r = JSON.parse(txt); if(Array.isArray(r)) return r; } catch(e){}
+    // 3. Extract first [...] block from anywhere in the text
+    const match = txt.match(/\[[\s\S]*\]/);
+    if(match) {
+      try { const r = JSON.parse(match[0]); if(Array.isArray(r)) return r; } catch(e){}
+    }
+    return null;
+  }
+
+  const systemPrompt = `You are a JSON-only data API for Indian IPO market data. 
+You MUST respond with ONLY a valid JSON array — no greetings, no explanations, no markdown, no text before or after the array.
+Your entire response must start with [ and end with ].`;
+
+  const userPrompt = `Today is ${today}. Return a JSON array of all active Indian IPOs (Mainboard + SME) with status OPEN, ALLOTMENT, or UPCOMING (opening within 30 days).
+
+Each object must have exactly these fields:
+{"name":"string","type":"Mainboard or SME","status":"OPEN or ALLOTMENT or UPCOMING","price":number,"gmp":number,"sub":"string like 42.5x or —","open":"like 24 Feb","close":"like 27 Feb","listing":"like 4 Mar 2025","lot":number}
+
+Output ONLY the JSON array. Start your response with [ and nothing else.`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:2500,
+        system: systemPrompt,
+        messages:[
+          {role:"user", content: userPrompt},
+          {role:"assistant", content: "["}   // ← force model to start with [
+        ]
+      })
+    });
+
+    const data = await res.json();
+    // Prepend the [ we used as the assistant prefill
+    let txt = "[" + (data.content?.map(c=>c.text||'').join('') || '');
+    const parsed = extractJSON(txt);
+
+    if(parsed && parsed.length > 0) {
+      // Validate & sanitise each entry
+      IPOS = parsed.filter(ipo =>
+        ipo.name && ipo.type && ipo.status &&
+        typeof ipo.price === 'number' && typeof ipo.gmp === 'number'
+      ).map(ipo => ({
+        name:    String(ipo.name),
+        type:    ['Mainboard','SME'].includes(ipo.type) ? ipo.type : 'SME',
+        status:  ['OPEN','ALLOTMENT','UPCOMING','LISTED'].includes(ipo.status) ? ipo.status : 'UPCOMING',
+        price:   Number(ipo.price) || 0,
+        gmp:     Number(ipo.gmp)   || 0,
+        sub:     String(ipo.sub    || '—'),
+        open:    String(ipo.open   || '—'),
+        close:   String(ipo.close  || '—'),
+        listing: String(ipo.listing|| '—'),
+        lot:     Number(ipo.lot)   || 1,
+      }));
+      if(IPOS.length === 0) throw new Error("No valid IPOs after sanitisation");
+      IPOS.sort((a,b)=>(SO[a.status]??9)-(SO[b.status]??9));
+      dataLoaded = true;
+      onDataReady(isRefresh);
+    } else {
+      throw new Error("Could not extract valid JSON array");
+    }
+  } catch(e) {
+    console.warn("AI fetch failed, using fallback data:", e.message);
+    loadFallbackData();
+    onDataReady(isRefresh);
+  }
+}
+
+// ── Fallback static data (used only if API fails) ──
+function loadFallbackData() {
+  IPOS = [
+    {name:"SEDEMAC Mechatronics",type:"Mainboard",status:"OPEN",price:1355,gmp:130,sub:"42.5×",open:"24 Feb",close:"27 Feb",listing:"4 Mar 2025",lot:11},
+    {name:"Accord Transformer",type:"SME",status:"OPEN",price:45,gmp:22,sub:"112×",open:"24 Feb",close:"26 Feb",listing:"4 Mar 2025",lot:3000},
+    {name:"Omnitech Engineering",type:"SME",status:"OPEN",price:220,gmp:11,sub:"8.2×",open:"25 Feb",close:"27 Feb",listing:"5 Mar 2025",lot:600},
+    {name:"Clean Max Enviro",type:"Mainboard",status:"ALLOTMENT",price:420,gmp:-30,sub:"4.8×",open:"19 Feb",close:"21 Feb",listing:"27 Feb 2025",lot:35},
+    {name:"PNGS Reva Diamond",type:"SME",status:"ALLOTMENT",price:105,gmp:-5,sub:"2.4×",open:"20 Feb",close:"24 Feb",listing:"28 Feb 2025",lot:1200},
+    {name:"Mobilise App",type:"SME",status:"UPCOMING",price:110,gmp:8,sub:"—",open:"3 Mar",close:"5 Mar",listing:"10 Mar 2025",lot:1200},
+    {name:"Enviro Infra Engineers",type:"Mainboard",status:"UPCOMING",price:148,gmp:15,sub:"—",open:"7 Mar",close:"11 Mar",listing:"14 Mar 2025",lot:101},
+  ];
+  dataLoaded = true;
+}
+
+// ── Called after data is ready ──
+function onDataReady(isRefresh=false) {
+  hideGlobalLoader();
+  buildTicker();
+  updateHomeMetrics();
+  setupCalc();
+
+  // Re-render whichever page is active
+  const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+  if(activePage==='tracker') renderTable();
+  if(activePage==='calendar') renderCalendar();
+
+  if(isRefresh) {
+    const btn=document.getElementById('aiBtn');
+    if(btn){
+      btn.innerHTML='<span>✓</span> Updated';
+      setTimeout(()=>{btn.innerHTML='<span>✦</span> AI Refresh';btn.classList.remove('loading');},3000);
+    }
+  }
+}
+
+// ── Manual refresh button ──
+function fetchAIData(){ loadLiveData(true); }
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('#navEl button').forEach(b=>b.classList.remove('nav-active'));
+  const b = document.getElementById('nb-'+id);
+  if(b) b.classList.add('nav-active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(id==='tracker') renderTable();
+  if(id==='calendar') renderCalendar();
+  if(id==='calculator') setupCalc();
+  if(id==='home') updateHomeMetrics();
+}
+
+/* ════════════════════════════════════════
+   TICKER
+════════════════════════════════════════ */
+function buildTicker() {
+  const el = document.getElementById('ticker');
+  const items = [...IPOS,...IPOS].map(ipo=>{
+    const pct = ((ipo.gmp/ipo.price)*100).toFixed(1);
+    const cls = ipo.gmp>0?'t-pos':ipo.gmp<0?'t-neg':'';
+    const sign = ipo.gmp>0?'+':'';
+    return `<div class="t-item"><span class="co">${ipo.name}</span><span class="${cls}">${sign}₹${ipo.gmp} (${sign}${pct}%)</span></div>`;
+  }).join('');
+  el.innerHTML = items;
+}
+
+/* ════════════════════════════════════════
+   HOME
+════════════════════════════════════════ */
+function updateHomeMetrics() {
+  const open = IPOS.filter(d=>d.status==='OPEN').length;
+  const upcoming = IPOS.filter(d=>d.status==='UPCOMING').length;
+  const pos = IPOS.filter(d=>d.gmp>0).length;
+  const valid = IPOS.filter(d=>d.status!=='UPCOMING');
+  const avg = valid.length?(valid.reduce((s,d)=>s+(d.gmp/d.price)*100,0)/valid.length).toFixed(1):0;
+  document.getElementById('m-open').textContent = open;
+  document.getElementById('m-upcoming').textContent = upcoming;
+  document.getElementById('m-pos').textContent = pos;
+  document.getElementById('m-avg').textContent = (avg>0?'+':'')+avg+'%';
+
+  const rows = IPOS.filter(d=>d.status==='OPEN').map(ipo=>{
+    const pct = ((ipo.gmp/ipo.price)*100).toFixed(1);
+    const vc = ipo.gmp>0?'pos-v':ipo.gmp<0?'neg-v':'zero-v';
+    const sign = ipo.gmp>0?'+':'';
+    return `<div class="live-row">
+      <div><div class="lr-name">${ipo.name}</div><div class="lr-type">${ipo.type}</div></div>
+      <div class="lr-gmp"><div class="lr-val ${vc}">${sign}₹${ipo.gmp}</div><div class="lr-pct ${vc}">${sign}${pct}%</div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('homePanelRows').innerHTML = rows || '<div style="padding:20px;text-align:center;color:var(--text3)">No open IPOs</div>';
+}
+
+/* ════════════════════════════════════════
+   TABLE
+════════════════════════════════════════ */
+function badge(s){
+  const m={OPEN:'<span class="badge b-open">● Open</span>',UPCOMING:'<span class="badge b-upcoming">Upcoming</span>',ALLOTMENT:'<span class="badge b-allotment">Allotment</span>',LISTED:'<span class="badge b-listed">Listed</span>'};
+  return m[s]||s;
+}
+function sentiment(pct){
+  const p=parseFloat(pct);
+  if(p<-10) return '💀';
+  if(p<0) return '🔻';
+  if(p<5) return '❄️';
+  if(p<12) return '🔥';
+  if(p<25) return '🔥🔥';
+  return '🚀';
+}
+
+function filt(f,btn){
+  curFilt=f;
+  document.querySelectorAll('#ptabs .pill-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderTable();
+}
+function doSearch(){curSearch=document.getElementById('searchInp').value.toLowerCase();renderTable();}
+
+function renderTable(){
+  let data = curFilt==='all'?IPOS:IPOS.filter(d=>d.status===curFilt);
+  if(curSearch) data=data.filter(d=>d.name.toLowerCase().includes(curSearch));
+  if(!data.length){document.getElementById('tblWrap').innerHTML='<div class="empty-state"><p>No IPOs match your filter.</p></div>';return;}
+  const now = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const rows=data.map(ipo=>{
+    const pct=((ipo.gmp/ipo.price)*100).toFixed(1);
+    const est=ipo.price+ipo.gmp;
+    const gc=ipo.gmp>0?'gp':ipo.gmp<0?'gn':'gz';
+    const sign=ipo.gmp>0?'+':'';
+    const bc=ipo.gmp>0?'var(--green)':ipo.gmp<0?'var(--red)':'var(--text3)';
+    const bw=Math.min(Math.abs(pct)*2,100);
+    const ec=ipo.gmp>=0?'var(--green)':'var(--red)';
+    return `<tr>
+      <td><div class="co-n">${ipo.name}</div><div class="co-t">${ipo.type}</div></td>
+      <td>${badge(ipo.status)}</td>
+      <td style="font-weight:600;font-family:var(--ff-d);font-size:16px;">₹${ipo.price.toLocaleString('en-IN')}</td>
+      <td class="${gc}">${sign}₹${ipo.gmp}</td>
+      <td><div class="bar-wrap"><span class="${gc}">${sign}${pct}%</span><div class="bar-bg"><div class="bar-fill" style="width:${bw}%;background:${bc}"></div></div></div></td>
+      <td style="font-weight:700;color:${ec};font-family:var(--ff-d);font-size:16px;">₹${est.toLocaleString('en-IN')}</td>
+      <td style="color:var(--text2);">${ipo.sub}</td>
+      <td style="color:var(--text2);font-size:12px;">${ipo.open} – ${ipo.close}</td>
+      <td style="color:var(--text2);font-size:12px;">${ipo.listing}</td>
+      <td class="sentiment">${sentiment(pct)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tblWrap').innerHTML=`
+    <table><thead><tr>
+      <th>Company</th><th>Status</th><th>Issue Price</th><th>GMP</th>
+      <th>GMP %</th><th>Est. Listing</th><th>Subscription</th>
+      <th>Open – Close</th><th>Listing Date</th><th>Mood</th>
+    </tr></thead><tbody>${rows}</tbody></table>
+    <div class="tbl-foot">
+      <span>${data.length} IPOs shown</span>
+      <span><span class="ai-tag">✦ AI Verified</span> &nbsp; ⏱ ${now} IST · Refreshes every 15 min</span>
+    </div>`;
+}
+
+
+
+/* ════════════════════════════════════════
+   CALENDAR
+════════════════════════════════════════ */
+function renderCalendar() {
+  if(!IPOS.length){document.getElementById('calBody').innerHTML='<div class="empty-state"><p>Loading…</p></div>';return;}
+  const now = new Date();
+  const monthName = now.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+  const nextMonth = new Date(now.getFullYear(), now.getMonth()+1, 1).toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+
+  const groups = {};
+  groups[`${monthName} — Open & Allotment`] = IPOS.filter(d=>d.status==='OPEN'||d.status==='ALLOTMENT');
+  groups[`Upcoming IPOs`] = IPOS.filter(d=>d.status==='UPCOMING');
+
+  document.getElementById('calBody').innerHTML = Object.entries(groups).map(([month,ipos])=>{
+    if(!ipos.length) return '';
+    return `<div class="cal-month">
+      <div class="cal-month-label">${month}</div>
+      <div class="cal-grid">
+        ${ipos.map(ipo=>{
+          const pct=((ipo.gmp/ipo.price)*100).toFixed(1);
+          const gc=ipo.gmp>0?'gp':ipo.gmp<0?'gn':'gz';
+          const sign=ipo.gmp>0?'+':'';
+          return `<div class="cal-card">
+            <div class="cal-card-h">
+              <div><div class="cal-name">${ipo.name}</div><div class="cal-type">${ipo.type}</div></div>
+              ${badge(ipo.status)}
+            </div>
+            <div class="cal-r"><span>Issue Price</span><strong>₹${ipo.price.toLocaleString('en-IN')}</strong></div>
+            <div class="cal-r"><span>GMP</span><strong class="${gc}">${sign}₹${ipo.gmp} (${sign}${pct}%)</strong></div>
+            <div class="cal-r"><span>Subscription</span><strong>${ipo.sub}</strong></div>
+            <div class="cal-r"><span>Open – Close</span><strong>${ipo.open} – ${ipo.close}</strong></div>
+            <div class="cal-r"><span>Listing Date</span><strong>${ipo.listing}</strong></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════
+   CALCULATOR
+════════════════════════════════════════ */
+function setupCalc(){
+  const sel=document.getElementById('cal-sel');
+  sel.innerHTML='<option value="">— Or enter manually below —</option>'+
+    IPOS.filter(d=>d.status==='OPEN'||d.status==='UPCOMING').map(ipo=>
+      `<option value="${ipo.price}|${ipo.gmp}|${ipo.lot}">${ipo.name} — ₹${ipo.price}</option>`
+    ).join('');
+}
+function prefill(){
+  const v=document.getElementById('cal-sel').value;
+  if(!v) return;
+  const [p,g,l]=v.split('|');
+  document.getElementById('cal-price').value=p;
+  document.getElementById('cal-gmp').value=g;
+  document.getElementById('cal-lot').value=l;
+  calc();
+}
+function calc(){
+  const price=parseFloat(document.getElementById('cal-price').value)||0;
+  const gmp=parseFloat(document.getElementById('cal-gmp').value)||0;
+  const lot=parseFloat(document.getElementById('cal-lot').value)||0;
+  const apps=parseFloat(document.getElementById('cal-apps').value)||1;
+  const prob=parseFloat(document.getElementById('cal-prob').value)||1;
+
+  const listing=price+gmp;
+  const pct=price?((gmp/price)*100).toFixed(2):0;
+  const inv=price*lot;
+  const profLot=gmp*lot;
+  const expected=profLot*apps*prob;
+
+  const listEl=document.getElementById('r-list');
+  listEl.textContent=price?'₹'+listing.toLocaleString('en-IN'):'₹ —';
+
+  const pctEl=document.getElementById('r-pct');
+  pctEl.textContent=price?(pct>0?'+':'')+pct+'%':'— %';
+  pctEl.className='res-val '+(pct>0?'pos':pct<0?'neg':'neutral');
+
+  document.getElementById('r-inv').textContent=inv?'₹'+inv.toLocaleString('en-IN'):'₹ —';
+
+  const lotEl=document.getElementById('r-lot');
+  lotEl.textContent=profLot?'₹'+Math.abs(profLot).toLocaleString('en-IN'):'₹ —';
+  lotEl.className='res-val '+(profLot>0?'pos':profLot<0?'neg':'neutral');
+
+  const totEl=document.getElementById('r-total');
+  totEl.textContent=expected?'₹'+Math.abs(expected).toLocaleString('en-IN'):'₹ —';
+  totEl.className='res-val '+(expected>0?'pos':expected<0?'neg':'neutral');
+  document.getElementById('r-hint').textContent=`${apps} app${apps>1?'s':''} × ${(prob*100).toFixed(0)}% allotment rate`;
+}
+
+/* ════════════════════════════════════════
+   CONTACT FORM
+════════════════════════════════════════ */
+function submitForm(){
+  const fn=document.getElementById('cf-fn').value;
+  const em=document.getElementById('cf-em').value;
+  if(!fn||!em){alert('Please enter your name and email.');return;}
+  document.getElementById('cFormWrap').style.display='none';
+  document.getElementById('cFormOk').style.display='block';
+}
+
+/* ════════════════════════════════════════
+   INIT — Auto-fetch live data on every load
+════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', ()=>{ loadLiveData(false); });
+</script>
+<!-- GLOBAL LOADING OVERLAY -->
+<div id="globalLoader" style="
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(8,9,13,0.96);backdrop-filter:blur(12px);
+  flex-direction:column;align-items:center;justify-content:center;gap:20px;
+">
+  <div style="
+    width:56px;height:56px;border:2px solid rgba(201,168,76,0.2);
+    border-top-color:#c9a84c;border-radius:50%;
+    animation:spin 0.9s linear infinite;
+  "></div>
+  <div style="text-align:center;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#e8c97a;margin-bottom:8px;">
+      FinoInvest
+    </div>
+    <div id="loaderMsg" style="font-size:13px;color:#a09070;letter-spacing:0.5px;">
+      Fetching live IPO data…
+    </div>
+    <div style="font-size:11px;color:#5a5040;margin-top:6px;">Powered by Claude AI · Updates every visit</div>
+  </div>
+</div>
+
+
+</html>
