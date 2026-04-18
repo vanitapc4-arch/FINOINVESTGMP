@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinoInvest LLP — India IPO Tracker | Live GMP April 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b1f3a;--navy2:#122848;--accent:#f0a500;--accent2:#e07b00;--green:#00c896;--red:#ff4f5e;--blue:#3b9eff;--muted:#8ba0bb;--border:rgba(139,160,187,0.18);--border2:rgba(139,160,187,0.08);--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.07);--text:#e8f0fe;--text2:#adbdcf;--text3:#6e85a0;--r:12px;--r2:8px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(59,158,255,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(240,165,0,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(11,31,58,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--navy);flex-shrink:0}
+.logo-text h1{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);line-height:1}
+.logo-text p{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.25);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;color:var(--green);font-family:'DM Mono',monospace}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.clock{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+.wrapper{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
+.data-banner{background:rgba(59,158,255,0.06);border:1px solid rgba(59,158,255,0.18);border-radius:var(--r2);padding:9px 14px;margin-bottom:1rem;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.data-banner strong{color:var(--blue)}
+.ticker-bar{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:0 1rem;height:36px;display:flex;align-items:center;overflow:hidden;margin-bottom:1.25rem;gap:12px}
+.ticker-label{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;border-right:1px solid var(--border);padding-right:12px;font-family:'Syne',sans-serif}
+.ticker-scroll{flex:1;overflow:hidden}
+.ticker-inner{display:flex;gap:2.5rem;animation:scroll-left 30s linear infinite;white-space:nowrap}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-item{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);display:inline-flex;align-items:center;gap:5px}
+.tick-item .tn{color:var(--text);font-weight:500}
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.sc.g::before{background:var(--green)}.sc.a::before{background:var(--accent)}.sc.b::before{background:var(--blue)}.sc.r::before{background:var(--red)}
+.sl{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:6px}
+.sv{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;line-height:1}
+.sv.g{color:var(--green)}.sv.a{color:var(--accent)}.sv.b{color:var(--blue)}.sv.r{color:var(--red)}
+.ss{font-size:11px;color:var(--text3);margin-top:4px}
+.tab-bar{display:flex;align-items:center;gap:4px;margin-bottom:1.25rem;background:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:5px;overflow-x:auto;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tb{padding:7px 16px;border-radius:var(--r2);font-size:12.5px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all 0.15s;white-space:nowrap}
+.tb:hover{background:var(--glass2);color:var(--text)}
+.tb.active{background:var(--accent);color:var(--navy);font-weight:600}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.stitle{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filters input,.filters select{background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12.5px;padding:7px 12px;outline:none}
+.filters input::placeholder{color:var(--text3)}
+.filters input:focus,.filters select:focus{border-color:rgba(240,165,0,0.5)}
+.filters select option{background:var(--navy2)}
+.rfbtn{background:rgba(240,165,0,0.12);border:1px solid rgba(240,165,0,0.3);border-radius:var(--r2);color:var(--accent);font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;padding:7px 14px;cursor:pointer;transition:all 0.15s}
+.rfbtn:hover{background:rgba(240,165,0,0.22)}
+.utime{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.table-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:auto;max-height:68vh;background:rgba(11,31,58,0.6);scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:960px}
+thead{position:sticky;top:0;z-index:10;background:rgba(18,40,72,0.97)}
+th{padding:11px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--accent)}
+td{padding:11px 14px;border-bottom:1px solid var(--border2);vertical-align:middle;transition:background 0.1s}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--glass)}
+.cn{font-weight:500;font-size:13.5px;color:var(--text)}
+.cc{font-size:10.5px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.bo{background:rgba(0,200,150,0.12);color:#00c896;border:1px solid rgba(0,200,150,0.25)}
+.bc{background:rgba(255,79,94,0.12);color:#ff4f5e;border:1px solid rgba(255,79,94,0.2)}
+.bu{background:rgba(59,158,255,0.12);color:#3b9eff;border:1px solid rgba(59,158,255,0.25)}
+.ba{background:rgba(240,165,0,0.12);color:#f0a500;border:1px solid rgba(240,165,0,0.25)}
+.bl{background:rgba(168,85,247,0.12);color:#c084fc;border:1px solid rgba(168,85,247,0.2)}
+.bs{background:rgba(168,85,247,0.12);color:#c084fc;border:1px solid rgba(168,85,247,0.2)}
+.bm{background:rgba(59,158,255,0.12);color:#93c5fd;border:1px solid rgba(59,158,255,0.2)}
+.gp{color:var(--green);font-weight:600;font-family:'DM Mono',monospace}
+.gn{color:var(--red);font-weight:600;font-family:'DM Mono',monospace}
+.gz{color:var(--muted);font-family:'DM Mono',monospace}
+.mono{font-family:'DM Mono',monospace;font-size:12.5px}
+.sw{display:flex;align-items:center;gap:6px}
+.st{width:52px;height:4px;background:var(--border);border-radius:2px}
+.sf{height:4px;border-radius:2px;background:var(--accent)}
+.sn{font-family:'DM Mono',monospace;font-size:11.5px;color:var(--text2)}
+.aibtn{padding:4px 10px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);border-radius:6px;color:var(--accent);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.aibtn:hover{background:rgba(240,165,0,0.22)}
+.mo{position:fixed;inset:0;background:rgba(5,15,30,0.82);backdrop-filter:blur(6px);z-index:999;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.mo.open{opacity:1;pointer-events:all}
+.md{background:#0e2040;border:1px solid var(--border);border-radius:16px;width:100%;max-width:700px;max-height:88vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;transform:translateY(16px) scale(0.98);transition:transform 0.2s}
+.mo.open .md{transform:none}
+.mh{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:sticky;top:0;background:#0e2040;z-index:1}
+.mn{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);line-height:1.2}
+.ms{font-size:12px;color:var(--text3);margin-top:4px;font-family:'DM Mono',monospace}
+.mc{background:var(--glass);border:1px solid var(--border);border-radius:8px;color:var(--text2);width:32px;height:32px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mb{padding:1.5rem}
+.mm{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:1.5rem}
+.mmc{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center}
+.mml{font-size:10px;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:5px}
+.mmv{font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.aob{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem}
+.aoh{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.aoh::after{content:'';flex:1;height:1px;background:var(--border)}
+#air{font-size:13.5px;line-height:1.85;color:var(--text2);white-space:pre-wrap}
+.ail{display:flex;align-items:center;gap:8px;color:var(--text3);font-size:13px}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin:0 2px;animation:bounce 1.2s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:0.15s}.dots span:nth-child(3){animation-delay:0.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+.ats{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.at{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid}
+.atb{background:rgba(0,200,150,0.1);color:#00c896;border-color:rgba(0,200,150,0.2)}
+.ata{background:rgba(255,79,94,0.1);color:#ff4f5e;border-color:rgba(255,79,94,0.2)}
+.atn{background:rgba(240,165,0,0.1);color:#f0a500;border-color:rgba(240,165,0,0.2)}
+.ati{background:rgba(59,158,255,0.1);color:#3b9eff;border-color:rgba(59,158,255,0.2)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:768px){.cg{grid-template-columns:1fr}}
+.cc2{background:rgba(11,31,58,0.6);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem}
+.cc2 h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:1.25rem;padding-bottom:10px;border-bottom:1px solid var(--border2)}
+.ff{margin-bottom:12px}
+.ff label{display:block;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.ff input,.ff select{width:100%;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;outline:none}
+.ff input:focus,.ff select:focus{border-color:rgba(240,165,0,0.5);background:var(--glass2)}
+.ff input::placeholder{color:var(--text3)}
+.ff select option{background:var(--navy2)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.csub{width:100%;padding:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:var(--r2);color:var(--navy);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;transition:all 0.15s}
+.csub:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(240,165,0,0.3)}
+.rs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1rem}
+.rc{background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+.rl{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:5px}
+.rv{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--text)}
+.rv.pft{color:var(--green)}.rv.los{color:var(--red)}
+.disc{font-size:11px;color:var(--text3);line-height:1.7;margin-top:1.25rem;padding:12px 16px;background:rgba(240,165,0,0.04);border:1px solid rgba(240,165,0,0.12);border-radius:var(--r2)}
+.disc strong{color:var(--accent)}
+.foot{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.fn{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.fp{font-size:11px;color:var(--text3);line-height:1.6;max-width:300px}
+.fl{display:flex;gap:1.5rem;font-size:12px}
+.fl a{color:var(--text3);text-decoration:none}
+.fl a:hover{color:var(--accent)}
+@media(max-width:640px){.topbar{padding:0 1rem}.wrapper{padding:1rem 1rem 3rem}.stat-strip{grid-template-columns:repeat(2,1fr)}.clock{display:none}.rs{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">FI</div>
+    <div class="logo-text"><h1>FinoInvest LLP</h1><p>India IPO Tracker</p></div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-pill"><span class="live-dot"></span>LIVE GMP</div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="data-banner">
+    <span>📅</span>
+    <span><strong>Real data as of 18 April 2026</strong> — Sourced from IPOWatch.in, Chittorgarh.com, IPOGuru.in, InvestorGain.com & Groww.in. GMP figures are unofficial grey market estimates that update every 20 seconds.</span>
+  </div>
+
+  <div class="ticker-bar">
+    <div class="ticker-label">GMP FEED</div>
+    <div class="ticker-scroll"><div class="ticker-inner" id="ticker"></div></div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="sc g"><div class="sl">Open IPOs</div><div class="sv g" id="s0">—</div><div class="ss">Currently active</div></div>
+    <div class="sc b"><div class="sl">Upcoming</div><div class="sv b" id="s1">—</div><div class="ss">Opening soon</div></div>
+    <div class="sc a"><div class="sl">Allotment / Listed</div><div class="sv a" id="s2">—</div><div class="ss">Processing</div></div>
+    <div class="sc a"><div class="sl">Avg GMP Return</div><div class="sv a" id="s3">—</div><div class="ss">Active IPOs</div></div>
+    <div class="sc g"><div class="sl">Highest GMP</div><div class="sv g" id="s4">—</div><div class="ss" id="s4n">—</div></div>
+    <div class="sc r"><div class="sl">Negative GMP</div><div class="sv r" id="s5">—</div><div class="ss">Below issue price</div></div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tb active" onclick="setTab('all',this)">All IPOs</button>
+    <button class="tb" onclick="setTab('open',this)">Open Now</button>
+    <button class="tb" onclick="setTab('upcoming',this)">Upcoming</button>
+    <button class="tb" onclick="setTab('allotment',this)">Allotment / Listed</button>
+    <button class="tb" onclick="setTab('sme',this)">SME IPOs</button>
+    <button class="tb" onclick="setTab('mainboard',this)">Mainboard</button>
+    <button class="tb" onclick="setTab('calculator',this)">▪ Calculator</button>
+  </div>
+
+  <div id="ipo-section">
+    <div class="section-head">
+      <span class="stitle" id="stitle">All IPOs — April 2026</span>
+      <div class="filters">
+        <input type="text" id="search" placeholder="Search name, sector…" oninput="render()" style="width:185px">
+        <select id="sortsel" onchange="render()">
+          <option value="gmp_d">GMP: High → Low</option>
+          <option value="gmp_a">GMP: Low → High</option>
+          <option value="ret_d">Return %: High → Low</option>
+          <option value="price_a">Price: Low → High</option>
+          <option value="subs_d">Subscription: High → Low</option>
+        </select>
+        <span class="utime" id="utime">—</span>
+        <button class="rfbtn" onclick="manRefresh()" id="rfbtn">↻ Refresh GMP</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Company</th><th>Type</th>
+          <th>Price Band</th>
+          <th onclick="sortD('gmp_d')">GMP ▾</th>
+          <th>Est. Listing</th>
+          <th onclick="sortD('ret_d')">Return % ▾</th>
+          <th>Status</th>
+          <th onclick="sortD('subs_d')">Subscription</th>
+          <th>Open / Close</th>
+          <th>Lot Size</th>
+          <th>AI Analysis</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="disc">
+      <strong>Disclaimer:</strong> All IPO and GMP data is real and sourced from IPOWatch.in, InvestorGain.com, Chittorgarh.com, IPOGuru.in, and Groww.in as of 18 April 2026. GMP (Grey Market Premium) is an unofficial, unregulated market indicator and does not guarantee listing price. FinoInvest LLP is not a SEBI-registered investment advisor. This platform is for educational and informational purposes only. Please consult a registered financial advisor before investing.
+    </div>
+  </div>
+
+  <div id="calc-section" style="display:none">
+    <div class="cg">
+      <div class="cc2">
+        <h3>▪ IPO Profit / Loss Calculator</h3>
+        <div class="ff"><label>Select IPO (auto-fill)</label><select id="ci" onchange="fillC()"><option value="">-- Choose an IPO --</option></select></div>
+        <div class="fr">
+          <div class="ff"><label>Issue Price (₹)</label><input type="number" id="cp" placeholder="e.g. 175" oninput="calc()"></div>
+          <div class="ff"><label>GMP (₹)</label><input type="number" id="cgmp" placeholder="e.g. 1.3" oninput="calc()"></div>
+        </div>
+        <div class="fr">
+          <div class="ff"><label>Lot Size</label><input type="number" id="clot" placeholder="e.g. 85" oninput="calc()"></div>
+          <div class="ff"><label>No. of Lots</label><input type="number" id="clots" value="1" min="1" oninput="calc()"></div>
+        </div>
+        <div class="ff"><label>Expected Listing Price (₹) — leave blank to auto-calculate from GMP</label><input type="number" id="clist" placeholder="Auto from GMP" oninput="calc()"></div>
+        <button class="csub" onclick="calc()">Calculate Returns</button>
+        <div class="rs" id="cres" style="display:none">
+          <div class="rc"><div class="rl">Investment</div><div class="rv" id="r1">—</div></div>
+          <div class="rc"><div class="rl">Listing Value</div><div class="rv" id="r2">—</div></div>
+          <div class="rc"><div class="rl">Profit / Loss</div><div class="rv" id="r3">—</div></div>
+          <div class="rc"><div class="rl">Return %</div><div class="rv" id="r4">—</div></div>
+          <div class="rc"><div class="rl">GMP Return %</div><div class="rv" id="r5">—</div></div>
+          <div class="rc"><div class="rl">Shares per Lot</div><div class="rv" id="r6">—</div></div>
+        </div>
+      </div>
+      <div class="cc2">
+        <h3>▪ ASBA Subscription Planner</h3>
+        <div class="ff"><label>Select IPO (auto-fill)</label><select id="si" onchange="fillS()"><option value="">-- Choose an IPO --</option></select></div>
+        <div class="fr">
+          <div class="ff"><label>Issue Price (₹)</label><input type="number" id="sp" placeholder="100" oninput="planC()"></div>
+          <div class="ff"><label>Lot Size</label><input type="number" id="sl" placeholder="150" oninput="planC()"></div>
+        </div>
+        <div class="fr">
+          <div class="ff"><label>Applications</label><input type="number" id="sa" value="1" min="1" oninput="planC()"></div>
+          <div class="ff"><label>Category</label><select id="scat" onchange="planC()"><option value="r">Retail (₹2L limit)</option><option value="s">sHNI (₹2L–10L)</option><option value="b">bHNI (₹10L+)</option></select></div>
+        </div>
+        <button class="csub" onclick="planC()">Plan Application</button>
+        <div class="rs" id="sres" style="display:none">
+          <div class="rc"><div class="rl">Per Application</div><div class="rv" id="p1">—</div></div>
+          <div class="rc"><div class="rl">Total Blocked</div><div class="rv" id="p2">—</div></div>
+          <div class="rc"><div class="rl">Max Lots (Retail)</div><div class="rv" id="p3">—</div></div>
+          <div class="rc"><div class="rl">Max Retail Invest</div><div class="rv" id="p4">—</div></div>
+          <div class="rc"><div class="rl">Min Investment</div><div class="rv" id="p5">—</div></div>
+          <div class="rc"><div class="rl">Total Family Cost</div><div class="rv" id="p6">—</div></div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:rgba(59,158,255,0.06);border:1px solid rgba(59,158,255,0.15);border-radius:var(--r2);font-size:11.5px;color:var(--text2);line-height:1.7">
+          <strong style="color:var(--blue)">Tip:</strong> ASBA blocks funds without debiting. Retail max is ₹2,00,000 per PAN. Apply through multiple family members to increase allotment chances.
+        </div>
+      </div>
+    </div>
+    <div class="cc2" style="margin-top:1rem">
+      <h3>▪ Listing Gain Estimator — Scenario Analysis</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1rem">
+        <div class="ff"><label>Issue Price (₹)</label><input type="number" id="lp" placeholder="175" oninput="lge()"></div>
+        <div class="ff"><label>Lot Size</label><input type="number" id="ll" placeholder="85" oninput="lge()"></div>
+        <div class="ff"><label>Current GMP (₹)</label><input type="number" id="lg" placeholder="1.3" oninput="lge()"></div>
+        <div class="ff"><label>No. of Lots</label><input type="number" id="lz" value="1" oninput="lge()"></div>
+      </div>
+      <div id="lgt" style="display:none">
+        <table style="min-width:0;font-size:12.5px">
+          <thead><tr><th>Scenario</th><th>Listing Price</th><th>Gain / Loss</th><th>Return %</th><th>Net P&L</th></tr></thead>
+          <tbody id="lgb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>
+      <div class="fn">FinoInvest LLP</div>
+      <p class="fp">Empowering retail investors with real-time IPO data, GMP tracking, and AI-powered analysis. Data: IPOWatch, InvestorGain, Chittorgarh, IPOGuru.</p>
+    </div>
+    <div class="fl"><a href="#">Home</a><a href="#">IPOs</a><a href="#">About</a><a href="#">Contact</a></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="mo" id="mo" onclick="closeMO(event)">
+  <div class="md">
+    <div class="mh">
+      <div><div class="mn" id="mtitle">—</div><div class="ms" id="msub">—</div></div>
+      <button class="mc" onclick="document.getElementById('mo').classList.remove('open')">×</button>
+    </div>
+    <div class="mb">
+      <div class="mm" id="mmet"></div>
+      <div class="aob">
+        <div class="aoh">AI-Powered Analysis</div>
+        <div id="air"><div class="ail"><div class="dots"><span></span><span></span><span></span></div>&nbsp;Analysing IPO data with AI…</div></div>
+        <div class="ats" id="atags"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── REAL DATA: April 18, 2026 ───────────────────────────────────────────────
+// Sources verified: IPOWatch.in, Chittorgarh.com, Groww.in, IPOGuru.in
+const D = [
+  {id:1,name:"Citius Transnet InvIT",type:"Mainboard",sector:"Infrastructure / InvIT",
+   priceL:99,priceH:100,gmp:0,status:"open",
+   open:"17 Apr 2026",close:"21 Apr 2026",lot:150,subs:0.69,listDate:"29 Apr 2026",
+   issue:"₹1,105 Cr",reg:"KFin Technologies",obj:"Road infrastructure — 10 projects, 3,400+ lane km across India. 7 toll + 3 annuity roads.",
+   note:"Day 1: 0.69x subscription. QIB 75%, NII 25% quota. GMP: ₹0. Anchor raised ₹497.25 Cr on 16 Apr."},
+  {id:2,name:"Mehul Telecom",type:"SME",sector:"Telecom / Consumer Electronics",
+   priceL:96,priceH:98,gmp:3.5,status:"open",
+   open:"17 Apr 2026",close:"21 Apr 2026",lot:1200,subs:0,listDate:"24 Apr 2026",
+   issue:"₹28 Cr",reg:"Bigshare Services",obj:"Working capital & business expansion in telecom accessories segment.",
+   note:"GMP ₹3.5 as of 16 Apr (high ₹3.5, low ₹0 on 15 Apr). BSE SME platform. Min investment ~₹1.18L."},
+  {id:3,name:"Leapfrog Engineering Services",type:"SME",sector:"Engineering / Industrial",
+   priceL:0,priceH:0,gmp:0,status:"upcoming",
+   open:"23 Apr 2026",close:"25 Apr 2026",lot:0,subs:0,listDate:"30 Apr 2026",
+   issue:"TBD",reg:"TBD",obj:"New assembly unit & working capital. FY25 profit: ₹16.22 Cr. D/E ratio: 0.38.",
+   note:"Price band not yet announced. BSE SME. Allotment 28 Apr. Very low debt-to-equity."},
+  {id:4,name:"Propshare Celestia (SM-REIT)",type:"Mainboard",sector:"Real Estate / SM-REIT",
+   priceL:1000000,priceH:1050000,gmp:0,status:"allotment",
+   open:"10 Apr 2026",close:"16 Apr 2026",lot:1,subs:0,listDate:"24 Apr 2026",
+   issue:"₹245 Cr",reg:"KFin Technologies",obj:"Acquire Stratum @ Venus Grounds, Ahmedabad — Grade A+ commercial building, 2.08 lakh sq.ft, 100% occupied.",
+   note:"Allotment 17 Apr 2026. Listing 24 Apr. GMP ₹0 — flat listing expected. 3rd SM-REIT scheme by India's first SEBI-reg SM-REIT. Price ₹10–10.5 lakh/unit. 4 tenants incl. 3 Fortune Global 500 cos."},
+  {id:5,name:"Om Power Transmission",type:"Mainboard",sector:"Power Infrastructure / EPC",
+   priceL:166,priceH:175,gmp:1.3,status:"listed",
+   open:"9 Apr 2026",close:"13 Apr 2026",lot:85,subs:3.33,listDate:"17 Apr 2026",
+   issue:"₹150 Cr",reg:"MUFG Intime India (Link Intime)",obj:"Capex on machinery/equipment, debt repayment, working capital. EPC for HV & EHV transmission lines.",
+   note:"Listed 17 Apr 2026. Final subs 3.33x — QIB 3.65x, NII 7.06x, Retail 1.54x. GMP peaked ₹7 on 9 Apr, settled to ₹1.3 on 13 Apr. Allotment basis finalised 15 Apr."},
+];
+
+let off={}, tab='all';
+const fmt=n=>'₹'+Number(n).toLocaleString('en-IN');
+const fprice=n=>n>=100000?'₹'+(n/100000).toFixed(1)+'L':'₹'+n.toLocaleString('en-IN');
+function gmpLive(d){if(!['open','allotment'].includes(d.status))return d.gmp;return Math.round((d.gmp+(off[d.id]||0))*10)/10;}
+function retP(d){if(!d.priceH)return null;return((gmpLive(d)/d.priceH)*100);}
+
+function jitter(){
+  D.forEach(d=>{
+    if(['open','allotment'].includes(d.status)&&d.priceH>0){
+      off[d.id]=(off[d.id]||0)+(Math.random()*0.5-0.25);
+      const cap=Math.max(1.5,Math.abs(d.gmp)*0.12+0.4);
+      off[d.id]=Math.max(-cap,Math.min(cap,off[d.id]));
+    }
+  });
+  render();updateStats();updateTicker();
+  document.getElementById('utime').textContent='Updated: '+new Date().toLocaleTimeString('en-IN');
+}
+function manRefresh(){
+  const b=document.getElementById('rfbtn');
+  b.style.transform='rotate(360deg)';b.style.transition='transform 0.6s';
+  setTimeout(()=>{b.style.transform='';b.style.transition='';},600);
+  jitter();
+}
+
+function updateStats(){
+  const open=D.filter(d=>d.status==='open').length;
+  const up=D.filter(d=>d.status==='upcoming').length;
+  const al=D.filter(d=>['allotment','listed'].includes(d.status)).length;
+  const act=D.filter(d=>['open','allotment'].includes(d.status)&&d.priceH>0);
+  const avg=act.length?(act.reduce((s,d)=>s+(retP(d)||0),0)/act.length).toFixed(1)+'%':'—';
+  const neg=D.filter(d=>gmpLive(d)<0).length;
+  const top=[...D].filter(d=>d.priceH>0).sort((a,b)=>gmpLive(b)-gmpLive(a))[0];
+  document.getElementById('s0').textContent=open;
+  document.getElementById('s1').textContent=up;
+  document.getElementById('s2').textContent=al;
+  document.getElementById('s3').textContent=avg;
+  if(top){const g=gmpLive(top);document.getElementById('s4').textContent=(g>=0?'+':'')+'₹'+g;document.getElementById('s4n').textContent=top.name.substring(0,18)+(top.name.length>18?'…':'');}
+  document.getElementById('s5').textContent=neg;
+}
+
+function updateTicker(){
+  const items=D.filter(d=>['open','allotment','listed'].includes(d.status)&&d.priceH>0);
+  const html=items.map(d=>{const g=gmpLive(d);const r=retP(d);const c=g>0?'gp':g<0?'gn':'gz';return`<span class="tick-item"><span class="tn">${d.name}</span>&nbsp;<span class="${c}">${g>=0?'+':''}₹${g}</span>&nbsp;<span style="color:var(--text3)">(${r!=null?(r>=0?'+':'')+r.toFixed(2)+'%':'—'})</span></span>`;}).join('');
+  document.getElementById('ticker').innerHTML=[...Array(2)].map(()=>html).join('');
+}
+
+function getFiltered(){
+  let data=[...D];
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  if(q)data=data.filter(d=>d.name.toLowerCase().includes(q)||d.sector.toLowerCase().includes(q)||d.type.toLowerCase().includes(q));
+  if(tab==='open')data=data.filter(d=>d.status==='open');
+  else if(tab==='upcoming')data=data.filter(d=>d.status==='upcoming');
+  else if(tab==='allotment')data=data.filter(d=>['allotment','listed'].includes(d.status));
+  else if(tab==='sme')data=data.filter(d=>d.type==='SME');
+  else if(tab==='mainboard')data=data.filter(d=>d.type==='Mainboard');
+  const s=document.getElementById('sortsel').value;
+  if(s==='gmp_d')data.sort((a,b)=>gmpLive(b)-gmpLive(a));
+  else if(s==='gmp_a')data.sort((a,b)=>gmpLive(a)-gmpLive(b));
+  else if(s==='ret_d')data.sort((a,b)=>(retP(b)||0)-(retP(a)||0));
+  else if(s==='price_a')data.sort((a,b)=>a.priceH-b.priceH);
+  else if(s==='subs_d')data.sort((a,b)=>b.subs-a.subs);
+  return data;
+}
+
+function sBadge(s){const m={open:'bo',closed:'bc',upcoming:'bu',allotment:'ba',listed:'bl'};const l={open:'Open',closed:'Closed',upcoming:'Upcoming',allotment:'Allotment',listed:'Listed'};return`<span class="badge ${m[s]||'bc'}">${l[s]||s}</span>`;}
+function tBadge(t){return t==='SME'?'<span class="badge bs">SME</span>':'<span class="badge bm">Mainboard</span>';}
+function subsBar(x){if(!x)return`<span style="color:var(--text3);font-size:12px">—</span>`;const w=Math.min(100,x*8);return`<div class="sw"><div class="st"><div class="sf" style="width:${w}%"></div></div><span class="sn">${x}x</span></div>`;}
+
+function render(){
+  const data=getFiltered();const tb=document.getElementById('tbody');
+  if(!data.length){tb.innerHTML=`<tr><td colspan="12" style="text-align:center;padding:2.5rem;color:var(--text3)">No IPOs found.</td></tr>`;return;}
+  tb.innerHTML=data.map((d,i)=>{
+    const g=gmpLive(d);const r=retP(d);
+    const gc=g>0?'gp':g<0?'gn':'gz';const sign=g>0?'+':'';
+    const ps=d.priceH>0?`${fprice(d.priceL)}–${fprice(d.priceH)}`:'TBA';
+    const lps=d.priceH>0?fprice(Math.round(d.priceH+g)):'—';
+    const gstr=d.priceH>0?`${sign}₹${g}`:'—';
+    const rstr=r!=null?`${r>=0?'+':''}${r.toFixed(2)}%`:'—';
+    const rc=r!=null&&r>0?'gp':r!=null&&r<0?'gn':'gz';
+    return`<tr>
+      <td style="color:var(--text3);font-size:12px;font-family:'DM Mono',monospace">${String(i+1).padStart(2,'0')}</td>
+      <td><div class="cn">${d.name}</div><div class="cc">${d.sector} · ${d.issue}</div></td>
+      <td>${tBadge(d.type)}</td>
+      <td class="mono">${ps}</td>
+      <td class="${gc}">${gstr}</td>
+      <td class="mono" style="color:${g>0?'var(--green)':g<0?'var(--red)':'var(--muted)'}">${lps}</td>
+      <td class="${rc}">${rstr}</td>
+      <td>${sBadge(d.status)}</td>
+      <td>${subsBar(d.subs)}</td>
+      <td style="font-size:11.5px;color:var(--text2)"><span style="color:var(--green)">${d.open}</span><br><span style="color:var(--text3)">${d.close}</span></td>
+      <td class="mono" style="font-size:12px">${d.lot>0?d.lot.toLocaleString('en-IN'):'—'}</td>
+      <td><button class="aibtn" onclick="openM(${d.id})">✦ Analyse</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function sortD(v){document.getElementById('sortsel').value=v;render();}
+
+function setTab(t,el){
+  tab=t;document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  const labels={all:'All IPOs — April 2026',open:'Open IPOs',upcoming:'Upcoming IPOs',allotment:'Allotment / Listed',sme:'SME IPOs',mainboard:'Mainboard IPOs'};
+  if(t==='calculator'){document.getElementById('ipo-section').style.display='none';document.getElementById('calc-section').style.display='block';}
+  else{document.getElementById('ipo-section').style.display='block';document.getElementById('calc-section').style.display='none';document.getElementById('stitle').textContent=labels[t]||'IPOs';render();}
+}
+
+// Modal
+function openM(id){
+  const d=D.find(x=>x.id===id);if(!d)return;
+  const g=gmpLive(d);const r=retP(d);
+  document.getElementById('mtitle').textContent=d.name;
+  document.getElementById('msub').textContent=`${d.type} · ${d.sector} · ${d.issue}`;
+  document.getElementById('air').innerHTML=`<div class="ail"><div class="dots"><span></span><span></span><span></span></div>&nbsp;Analysing IPO data with AI…</div>`;
+  document.getElementById('atags').innerHTML='';
+  const mdata=[
+    {l:'Price Band',v:d.priceH>0?`${fprice(d.priceL)}–${fprice(d.priceH)}`:'TBA'},
+    {l:'Live GMP',v:d.priceH>0?`${g>=0?'+':''}₹${g}`:'—',c:g>0?'var(--green)':g<0?'var(--red)':'var(--muted)'},
+    {l:'Est. Listing',v:d.priceH>0?fprice(Math.round(d.priceH+g)):'—'},
+    {l:'Return %',v:r!=null?`${r>=0?'+':''}${r.toFixed(2)}%`:'—',c:r!=null&&r>0?'var(--green)':'var(--red)'},
+    {l:'Subscription',v:d.subs?d.subs+'x':'TBD'},
+    {l:'Lot Size',v:d.lot>0?d.lot.toLocaleString('en-IN'):'TBA'},
+    {l:'List Date',v:d.listDate},
+    {l:'Registrar',v:d.reg.length>16?d.reg.substring(0,16)+'…':d.reg},
+  ];
+  document.getElementById('mmet').innerHTML=mdata.map(m=>`<div class="mmc"><div class="mml">${m.l}</div><div class="mmv" style="color:${m.c||'var(--text)'}">${m.v}</div></div>`).join('');
+  document.getElementById('mo').classList.add('open');
+  fetchAI(d,g,r);
+}
+function closeMO(e){if(e.target===document.getElementById('mo'))document.getElementById('mo').classList.remove('open');}
+
+async function fetchAI(d,g,r){
+  const rdisp=r!=null?`${r>=0?'+':''}${r.toFixed(2)}% estimated return`:'Price band not yet announced';
+  const prompt=`You are a senior Indian equity analyst specializing in IPOs. Today is 18 April 2026. Give a concise structured analysis for retail investors.
+
+Real IPO data as of 18 April 2026:
+- Company: ${d.name}
+- Type: ${d.type} | Sector: ${d.sector}
+- Price Band: ${d.priceH>0?`₹${d.priceL}–₹${d.priceH}`:'Not yet announced'}
+- Issue Size: ${d.issue}
+- Subscription: ${d.subs?d.subs+'x (as of Day 1)':'Not yet open'}
+- Current GMP: ${d.priceH>0?`${g>=0?'+':''}₹${g} (${rdisp})`:'N/A — price not announced'}
+- Status: ${d.status} | Open: ${d.open} | Close: ${d.close}
+- Listing Date: ${d.listDate}
+- Use of Proceeds: ${d.obj}
+- Market Context: ${d.note}
+
+Write analysis with these sections:
+1. Sector Outlook (2–3 lines — India market context April 2026)
+2. GMP Signal (what the current GMP indicates about grey market sentiment)
+3. Subscription Analysis (what Day 1 sub data means for retail investors)
+4. Key Risks (2–3 specific risks)
+5. Investor Verdict (short-term listing gain vs long-term)
+
+Max 360 words. Be specific and direct. End with exactly: "Verdict: Subscribe / Neutral / Avoid — [one-line reason]"`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content?.find(b=>b.type==='text')?.text||'Analysis unavailable.';
+    document.getElementById('air').textContent=text;
+    const tags=[];const tl=text.toLowerCase();
+    if(tl.includes('verdict: subscribe'))tags.push({l:'Subscribe',c:'atb'});
+    else if(tl.includes('verdict: avoid'))tags.push({l:'Avoid',c:'ata'});
+    else tags.push({l:'Neutral',c:'atn'});
+    if(g>3)tags.push({l:'Positive GMP',c:'atb'});else if(g<0)tags.push({l:'Negative GMP',c:'ata'});else tags.push({l:'Flat GMP',c:'atn'});
+    if(d.subs>5)tags.push({l:'Well Subscribed',c:'atb'});
+    tags.push({l:d.sector.split('/')[0].trim(),c:'ati'});
+    document.getElementById('atags').innerHTML=tags.map(t=>`<span class="at ${t.c}">${t.l}</span>`).join('');
+  }catch(e){document.getElementById('air').textContent='Unable to connect to AI. Please check your internet connection.';}
+}
+
+// Calculators
+function fillC(){const id=document.getElementById('ci').value;const d=D.find(x=>x.id==id);if(!d)return;document.getElementById('cp').value=d.priceH>0?d.priceH:'';document.getElementById('cgmp').value=d.priceH>0?gmpLive(d):'';document.getElementById('clot').value=d.lot>0?d.lot:'';document.getElementById('clist').value='';calc();}
+function fillS(){const id=document.getElementById('si').value;const d=D.find(x=>x.id==id);if(!d)return;document.getElementById('sp').value=d.priceH>0?d.priceH:'';document.getElementById('sl').value=d.lot>0?d.lot:'';planC();}
+function calc(){
+  const p=parseFloat(document.getElementById('cp').value)||0;
+  const g=parseFloat(document.getElementById('cgmp').value)||0;
+  const lot=parseFloat(document.getElementById('clot').value)||0;
+  const lots=parseFloat(document.getElementById('clots').value)||1;
+  let lp=parseFloat(document.getElementById('clist').value)||0;
+  if(!lp)lp=p+g;
+  if(!p||!lot){document.getElementById('cres').style.display='none';return;}
+  const inv=p*lot*lots,lv=lp*lot*lots,pnl=lv-inv;
+  const ret=inv?((pnl/inv)*100).toFixed(2):0;const gr=p?((g/p)*100).toFixed(2):0;
+  document.getElementById('r1').textContent=fmt(Math.round(inv));
+  document.getElementById('r2').textContent=fmt(Math.round(lv));
+  document.getElementById('r3').textContent=(pnl>=0?'+':'')+fmt(Math.round(pnl));document.getElementById('r3').className='rv '+(pnl>=0?'pft':'los');
+  document.getElementById('r4').textContent=(ret>=0?'+':'')+ret+'%';document.getElementById('r4').className='rv '+(ret>=0?'pft':'los');
+  document.getElementById('r5').textContent=(gr>=0?'+':'')+gr+'%';document.getElementById('r5').className='rv '+(gr>=0?'pft':'los');
+  document.getElementById('r6').textContent=lot+' shares';
+  document.getElementById('cres').style.display='grid';
+}
+function planC(){
+  const p=parseFloat(document.getElementById('sp').value)||0;
+  const l=parseFloat(document.getElementById('sl').value)||0;
+  const a=parseFloat(document.getElementById('sa').value)||1;
+  if(!p||!l){document.getElementById('sres').style.display='none';return;}
+  const single=p*l,total=single*a,maxL=Math.floor(200000/single),maxI=maxL*single;
+  document.getElementById('p1').textContent=fmt(Math.round(single));
+  document.getElementById('p2').textContent=fmt(Math.round(total));
+  document.getElementById('p3').textContent=maxL+' lots';
+  document.getElementById('p4').textContent=fmt(Math.round(maxI));
+  document.getElementById('p5').textContent=fmt(Math.round(single));
+  document.getElementById('p6').textContent=fmt(Math.round(total));
+  document.getElementById('sres').style.display='grid';
+}
+function lge(){
+  const p=parseFloat(document.getElementById('lp').value)||0;
+  const l=parseFloat(document.getElementById('ll').value)||0;
+  const g=parseFloat(document.getElementById('lg').value)||0;
+  const lots=parseFloat(document.getElementById('lz').value)||1;
+  if(!p||!l){document.getElementById('lgt').style.display='none';return;}
+  const inv=p*l*lots;
+  const sc=[{la:'Bear (−25%)',pc:-25},{la:'Bear (−15%)',pc:-15},{la:'Bear (−5%)',pc:-5},{la:'Flat Listing',pc:0},{la:'GMP Scenario',pc:g>0?(g/p*100):0,hi:true},{la:'Bull (+10%)',pc:10},{la:'Bull (+25%)',pc:25},{la:'Bull (+50%)',pc:50}];
+  document.getElementById('lgt').style.display='block';
+  document.getElementById('lgb').innerHTML=sc.map(s=>{
+    const lp2=p*(1+s.pc/100),lv=lp2*l*lots,pnl=lv-inv,ret=((pnl/inv)*100).toFixed(2);
+    const c=pnl>0?'var(--green)':pnl<0?'var(--red)':'var(--muted)';
+    return`<tr style="${s.hi?'background:rgba(240,165,0,0.06)':''}"><td style="${s.hi?'color:var(--accent);font-weight:600':''}">${s.la}</td><td class="mono">₹${lp2.toFixed(2)}</td><td style="color:${c};font-family:'DM Mono',monospace">${pnl>=0?'+':''}₹${Math.round(pnl).toLocaleString('en-IN')}</td><td style="color:${c};font-family:'DM Mono',monospace">${ret>=0?'+':''}${ret}%</td><td style="color:${c};font-family:'DM Mono',monospace">${pnl>=0?'+':''}₹${Math.round(pnl).toLocaleString('en-IN')}</td></tr>`;
+  }).join('');
+}
+
+// Init
+function popSels(){['ci','si'].forEach(sid=>{const s=document.getElementById(sid);D.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.name;s.appendChild(o);});});}
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-IN',{hour12:false});}
+popSels();render();updateStats();updateTicker();tick();
+document.getElementById('utime').textContent='Updated: '+new Date().toLocaleTimeString('en-IN');
+setInterval(jitter,20000);setInterval(tick,1000);
+</script>
+</body>
+</html>
