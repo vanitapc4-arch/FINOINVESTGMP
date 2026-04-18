@@ -1,0 +1,7 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/finoinvest-ipo-tracker.html"
+  status = 200
